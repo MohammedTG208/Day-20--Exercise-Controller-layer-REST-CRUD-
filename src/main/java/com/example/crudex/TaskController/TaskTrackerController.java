@@ -45,4 +45,16 @@ public class TaskTrackerController {
         }
         return allMatchTask;
     }
+    //update
+    @GetMapping("/update/{id}")
+    public APIResponse updateTask(@RequestBody Task task,@PathVariable int id){
+        for (int i = 0; i <tasks.size() ; i++) {
+            if (tasks.get(i).getId() == id) {
+                tasks.set(i,task);
+                return new APIResponse("Task Update");
+            }
+        }
+        return new APIResponse("Not Task Update");
+    }
 }
+
