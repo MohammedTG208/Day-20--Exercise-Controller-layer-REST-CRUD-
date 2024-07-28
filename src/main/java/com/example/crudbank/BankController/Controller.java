@@ -44,33 +44,39 @@ public class Controller {
         return new ApiResponse("Successfully deleted customers");
     }
 
-    @PutMapping("/Deposit/{deposit}")
+    @PutMapping("/Deposit/{deposit}/{id}")
     //Deposit money to customer
-    public ApiResponse depositCustomer(@RequestBody Coustmers coustmers, @PathVariable double deposit) {
-        for(Coustmers coustmer : coustmersList) {
-            if (coustmer.equals(coustmers)) {
-                coustmer.setBalance(coustmer.getBalance()+deposit);
-                return new ApiResponse("Successfully deposited");
+    public ApiResponse depositCustomer(@PathVariable int id, @PathVariable double deposit) {
+        for (int i = 0; i < coustmersList.size(); i++) {
+            if (coustmersList.get(i).getId() == id) {
+                coustmersList.get(i).setBalance(coustmersList.get(i).getBalance() + deposit);
+                return new ApiResponse("Successfully updated deposit");
             }
         }
         return new ApiResponse("Customer not found");
     }
 
-    @PutMapping("/withdraw/{money}")
+    @PutMapping("/withdraw/{money}/{id}")
     //Withdraw money from customers
-    public ApiResponse withdrawalCustomer(@RequestBody Coustmers coustmers,@PathVariable double money) {
-        for (Coustmers coustmer : coustmersList) {
-            if (coustmer.equals(coustmers)) {
-                if (money > coustmers.getBalance()) {
-                    return new ApiResponse("can not withdraw");
-                } else {
-                    coustmer.setBalance(coustmer.getBalance() - money);
-                    return new ApiResponse("Successfully withdrawn");
-                }
-            }
-        }
+    public ApiResponse withdrawalCustomer(@PathVariable double money,@PathVariable int id) {
+       for (int i = 0; i < coustmersList.size(); i++) {
+           if (coustmersList.get(i).getId() == id) {
+               if (coustmersList.get(i).getBalance() < money) {
+                   coustmersList.get(i).setBalance(coustmersList.get(i).getBalance() - money);
+                   return new ApiResponse("Withdraw money");
+               }
+           }
+       }
         return new ApiResponse("Customer not found");
     }
 
 
+    @PutMapping("/update/{id}")
+    public ApiResponse updateCustomer(@RequestBody Coustmers coustmers) {
+        for (int i = 0; i < coustmersList.size(); i++) {
+            if (coustmersList.get(i).getId() == coustmers.getId()) {
+                coustmersList.set(i, coustmers);
+            }
+        }
+    }
 }
